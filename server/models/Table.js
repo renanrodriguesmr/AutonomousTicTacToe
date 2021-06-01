@@ -14,7 +14,7 @@ class Table {
 			let temp = []
 
 			for(let j = 0; j < 3; j++){
-				const spot = new Spot(0, names[i+j])
+				const spot = new Spot(0, names[3*i+j])
 				temp.push(spot)
 			}
 
