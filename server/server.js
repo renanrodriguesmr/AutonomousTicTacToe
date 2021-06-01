@@ -29,11 +29,17 @@ app.get('/teste_clear', (req, res) => {
 app.get('/teste1', (req, res) => {
 	game.movePiece(true, 0, 0)
 	game.printTable()
+	// remove answer to test
+	game.movePiece(false)
+	game.printTable()
  	res.send(appState.getFormattedString())
 })
 
 app.get('/teste2', (req, res) => {
-	game.movePiece(false, 1, 0)
+	game.movePiece(true, 0, 1)
+	game.printTable()
+	// remove answer to test
+	game.movePiece(false)
 	game.printTable()
  	res.send(appState.getFormattedString())
 })

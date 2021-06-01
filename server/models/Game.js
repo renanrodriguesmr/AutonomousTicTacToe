@@ -4,7 +4,7 @@ const Buffer = require('./Buffer')
 const Player = require('./Player')
 const Table = require('./Table')
 
-// const tictactoe = require('tictactoe-minimax-ai');
+const tictactoe = require('tictactoe-minimax-ai');
 
 let options = {
 	"computer": "o",
@@ -33,17 +33,37 @@ class Game {
 	}
 
 	didGameEnd(){
-		// TODO: check
-		// console.log(tictactoe.boardEvaluate(this._table.getRepresentation()));
-		return false;
+		const status = tictactoe.boardEvaluate(this._table.getRepresentation()).status
+		if(status == "none"){
+			return false
+		}
+
+		if(status == "win"){
+			this.winner = this._playerO
+		}
+
+		if(status == "loss"){
+			this.winner = this._playerX
+		}
+
+		if(status == "tie"){
+			this.winner = null
+		}
+		return true;
 	}
 
-	movePiece(isPlayerX, x, y){
+	movePiece(isPlayerX, x = 0, y = 0){
 		if(this._ended || !this.isRightTurn(isPlayerX) || !this.isValidCoordinates(x,y)){
 			return false
 		}
 
 		this._turn = !this._turn
+
+		if(!isPlayerX){
+			const bestMove = tictactoe.bestMove(this._table.getRepresentation(), options)
+			x = Math.floor(bestMove/3)
+			y = bestMove%3
+		}
 
 		const bufferSpot = isPlayerX ? this._bufferX.getFirstFilledSpot() : this._bufferO.getFirstFilledSpot()
 		const spot = this._table.getSpot(x, y)
