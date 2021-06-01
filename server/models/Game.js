@@ -68,6 +68,10 @@ class Game {
 		const bufferSpot = isPlayerX ? this._bufferX.getFirstFilledSpot() : this._bufferO.getFirstFilledSpot()
 		const spot = this._table.getSpot(x, y)
 
+		if(spot.isFilled()){
+			return false
+		}
+
 		eventBus.emit('new-move', null, bufferSpot.getName(), spot.getName());
 
 		spot.setPiece(isPlayerX)
@@ -76,7 +80,6 @@ class Game {
 		if(this.didGameEnd()){
 			this.clearTable()
 			this._ended = true
-			// check winner
 		}
 
 		return true
