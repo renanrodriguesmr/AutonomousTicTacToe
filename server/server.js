@@ -1,26 +1,11 @@
 const express = require('express')
 const app = express()
+const eventBus = require('js-event-bus')();
 const port = 3000
 
-class MeuEstado {
-	constructor(){
-		this.status = 0
-		this.source = "X1"
-		this.target = "G1"
-	}
+const { Game } = require('./models')
 
-	setMessage(){
-		this.status = 1
-	}
-
-	clearMessage(){
-		this.status = 0
-	}
-
-	getFormattedString(){
-		return this.status+","+this.source+","+this.target
-	}
-}
+const AppState = require('./state')
 
 app.use((req, res, next) => {
   res.set('Cache-Control', 'no-store')
@@ -28,26 +13,40 @@ app.use((req, res, next) => {
 })
 
 app.get('/pieces_news', (req, res) => {
- 	res.send(meuEstado.getFormattedString())
-})
-
-app.get('/teste_update', (req, res) => {
-	meuEstado.setMessage()
- 	res.send(meuEstado.getFormattedString())
-})
-
-app.get('/teste_clear', (req, res) => {
-	meuEstado.clearMessage()
- 	res.send(meuEstado.getFormattedString())
+ 	res.send(appState.getFormattedString())
 })
 
 app.post('/piece_changed', (req, res) => {
-	meuEstado.clearMessage()
+	appState.clear()
   	res.sendStatus(200)
+})
+
+app.get('/teste_clear', (req, res) => {
+	appState.clear()
+ 	res.send(appState.getFormattedString())
+})
+
+app.get('/teste1', (req, res) => {
+	game.movePiece(true, 0, 0)
+	game.printTable()
+ 	res.send(appState.getFormattedString())
+})
+
+app.get('/teste2', (req, res) => {
+	game.movePiece(false, 1, 0)
+	game.printTable()
+ 	res.send(appState.getFormattedString())
 })
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
 })
 
-meuEstado = new MeuEstado()
+appState = new AppState()
+
+eventBus.on('new-move', function (source, target) {
+	appState.setNewMov(source, target)
+});
+
+game = new Game(true)
+game.printTable()

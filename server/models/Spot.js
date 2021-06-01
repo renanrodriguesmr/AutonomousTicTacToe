@@ -5,16 +5,21 @@ class Spot {
 		piece =-1 => O
 	*/
 
-	constructor(piece = 0){
-		this._piece = piece;
+	constructor(piece = 0, name){
+		this._piece = piece
+		this._name = name
 	}
 
 	clearSpot(){
-		this._piece = 0;
+		this._piece = 0
 	}
 
 	setPiece(isX){
-		this._piece = isX ? 1 : -1;
+		this._piece = isX ? 1 : -1
+	}
+
+	isFilled(){
+		return this._piece != 0
 	}
 
 	getRepresentation(){
@@ -23,6 +28,10 @@ class Spot {
 		}
 
 		return this._piece == 1 ? 'x' : 'o'
+	}
+
+	getName(){
+		return this._name
 	}
 }
 

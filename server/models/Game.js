@@ -1,19 +1,27 @@
-const Spot = require('./Spot')
+const eventBus = require('js-event-bus')();
+
 const Buffer = require('./Buffer')
 const Player = require('./Player')
 const Table = require('./Table')
 
+// const tictactoe = require('tictactoe-minimax-ai');
+
+let options = {
+	"computer": "o",
+	"opponent": "x"
+};
+
 class Game {
 	constructor(xStarting){
 		this._playerX = new Player(false)
-		this._playerY = new Player(true)
+		this._playerO = new Player(true)
 		this._turn = xStarting
 		this._ended = false
 		this.winner = null
 
 		this._table = new Table()
 		this._bufferX = new Buffer(true)
-		this._bufferY = new Buffer(false)
+		this._bufferO = new Buffer(false)
 	}
 
 	isRightTurn(isPlayerX){
@@ -26,6 +34,7 @@ class Game {
 
 	didGameEnd(){
 		// TODO: check
+		// console.log(tictactoe.boardEvaluate(this._table.getRepresentation()));
 		return false;
 	}
 
@@ -36,10 +45,13 @@ class Game {
 
 		this._turn = !this._turn
 
-		// TODO: checar o primeiro do buffer disponivel
-
+		const bufferSpot = isPlayerX ? this._bufferX.getFirstFilledSpot() : this._bufferO.getFirstFilledSpot()
 		const spot = this._table.getSpot(x, y)
+
+		eventBus.emit('new-move', null, bufferSpot.getName(), spot.getName());
+
 		spot.setPiece(isPlayerX)
+		bufferSpot.clearSpot()
 
 		if(this.didGameEnd()){
 			this.clearTable()
