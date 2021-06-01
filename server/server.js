@@ -5,7 +5,7 @@ const port = 3000
 
 const { Game } = require('./models')
 
-const AppState = require('./state')
+const Queue = require('./state')
 
 app.use((req, res, next) => {
   res.set('Cache-Control', 'no-store')
@@ -13,45 +13,43 @@ app.use((req, res, next) => {
 })
 
 app.get('/pieces_news', (req, res) => {
- 	res.send(appState.getFormattedString())
+ 	res.send(queue.getFrontEncoded())
 })
 
 app.post('/piece_changed', (req, res) => {
-	appState.clear()
+	queue.dequeue()
   	res.sendStatus(200)
 })
 
 app.get('/teste_clear', (req, res) => {
-	appState.clear()
- 	res.send(appState.getFormattedString())
+	queue.dequeue()
+ 	res.send(queue.getFrontEncoded())
 })
 
 app.get('/teste1', (req, res) => {
 	game.movePiece(true, 0, 0)
 	game.printTable()
-	// remove answer to test
 	game.movePiece(false)
 	game.printTable()
- 	res.send(appState.getFormattedString())
+ 	res.send(queue.getFrontEncoded())
 })
 
 app.get('/teste2', (req, res) => {
 	game.movePiece(true, 0, 1)
 	game.printTable()
-	// remove answer to test
 	game.movePiece(false)
 	game.printTable()
- 	res.send(appState.getFormattedString())
+ 	res.send(queue.getFrontEncoded())
 })
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
 })
 
-appState = new AppState()
+queue = new Queue()
 
 eventBus.on('new-move', function (source, target) {
-	appState.setNewMov(source, target)
+	queue.addNewMov(source, target)
 });
 
 game = new Game(true)

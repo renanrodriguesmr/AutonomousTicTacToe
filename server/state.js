@@ -1,23 +1,37 @@
-class AppState {
-	constructor(){
-		this.status = 0
-		this.source = "X1"
-		this.target = "G1"
-	}
-
-	setNewMov(source, target){
-		this.status = 1
+class Mov {
+	constructor(source, target){
 		this.source = source
 		this.target = target
 	}
+}
 
-	clear(){
-		this.status = 0
+class Queue {
+	constructor(){
+		this.queue = []
 	}
 
-	getFormattedString(){
-		return this.status+","+this.source+","+this.target
+	addNewMov(source, target){
+		const mov = new Mov(source, target)
+		this.queue.push(mov)
+	}
+
+	dequeue(){
+		if(this.queue.length == 0){
+			return
+		}
+
+		this.queue.shift()
+	}
+
+	getFrontEncoded(){
+		if(this.queue.length == 0){
+			return "0,0,0"
+		}
+
+		const mov = this.queue[0]
+
+		return "1"+","+mov.source+","+mov.target
 	}
 }
 
-module.exports = AppState
+module.exports = Queue
