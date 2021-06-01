@@ -30,7 +30,10 @@ class Queue {
 
 		const mov = this.queue[0]
 
-		return "1"+","+mov.source+","+mov.target
+		const message = "1"+","+mov.source+","+mov.target
+		console.log(message)
+
+		return message
 	}
 }
 
