@@ -78,7 +78,7 @@ class Game {
 		bufferSpot.clearSpot()
 
 		if(this.didGameEnd()){
-			this.clearTable()
+			// this.clearTable()
 			this._ended = true
 		}
 
