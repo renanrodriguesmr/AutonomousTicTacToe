@@ -9,6 +9,7 @@
 
 <body>
     <h1 class="title">Tic Tac Toe</h1>
+    <h2 id="endGame" class="subtitle">FIM DE JOGO</h2>
     <table class="grid_play">
       <tr>
         <td><div id="box1" class="box" onclick="selectBox(0)"></div></td>
@@ -27,8 +28,12 @@
       </tr>
     </table>
 
+    <a class="button" onclick="newGame()">New Game</a>
+
     <div id="loading" class="loading">
         <div class="spinner"></div>
     </div>
+
+    <p>Por favor aguarde a execução dos movimentos do robô antes de executar uma nova jogada</p>
 </body>
 </html>

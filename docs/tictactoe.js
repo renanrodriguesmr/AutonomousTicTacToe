@@ -22,9 +22,7 @@ function getGameInfo(){
     xmlHttp.send( null );
 
     hideLoading();
-    return JSON.parse(xmlHttp.response);
-
-    
+    return JSON.parse(xmlHttp.response); 
 }
 
 function requestAMov(position){
@@ -36,6 +34,17 @@ function requestAMov(position){
 
     var data = JSON.stringify({"position": position});
     xmlHttp.send(data);
+
+    hideLoading();
+    return JSON.parse(xmlHttp.response);
+}
+
+function requestNewGame(){
+    showLoading();
+
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open("POST", url + "new_game", false);
+    xmlHttp.send();
 
     hideLoading();
     return JSON.parse(xmlHttp.response);
@@ -60,8 +69,12 @@ function updateGrid(gridInfo){
 }
 
 function updateGame(gameInfo){
-    console.log(gameInfo.ended);
     updateGrid(gameInfo.representation);
+    if(gameInfo.ended){
+        document.getElementById("endGame").className = "subtitle";
+    } else {
+        document.getElementById("endGame").className = "hide-element subtitle";
+    }
 }
 
 function selectBox(value){
@@ -71,6 +84,11 @@ function selectBox(value){
     
     value = value + 1;
     var gameInfo = requestAMov(value);
+    updateGame(gameInfo);
+}
+
+function newGame(){
+    var gameInfo = requestNewGame();
     updateGame(gameInfo);
 }
 
