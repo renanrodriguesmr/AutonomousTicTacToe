@@ -1,4 +1,6 @@
 const express = require('express')
+const cors = require('cors')
+
 const { Game } = require('./models')
 const Queue = require('./state')
 
@@ -8,6 +10,20 @@ const eventBus = require('js-event-bus')();
 const port = process.env.PORT || 8080;
 
 // https://hidden-spire-43960.herokuapp.com/
+
+/*
+app.use(cors({
+	origin: 'https://renanrodriguesmr.github.io/AutonomousTicTacToe/',
+	optionsSuccessStatus: 200
+}))
+*/
+
+app.use(cors({
+	credentials: 'true',  
+    origin: '*', 
+    methods: 'GET, POST, PUT, DELETE, OPTIONS', 
+    allowedHeaders: '*'
+}))
 
 app.use((req, res, next) => {
   res.set('Cache-Control', 'no-store')
