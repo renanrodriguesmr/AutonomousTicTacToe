@@ -1,32 +1,29 @@
-var url = "http://localhost:8080/";
-// var url = "https://hidden-spire-43960.herokuapp.com/";
+var url = "https://hidden-spire-43960.herokuapp.com/";
 
 var boxStatus = [true, true, true, true, true, true, true, true, true, true];
-var loading = false;
+var blocker = false;
 
-function showLoading(){
-    loading = true;
-    document.getElementById("loading").className = "loading";
+function block(){
+    blocker = true;
 }
 
-function hideLoading(){
-    loading = false;
-    document.getElementById("loading").className = "hide-element loading";
+function unblock(){
+    blocker = false;
 }
 
 function getGameInfo(){
-    showLoading();
+    block();
 
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open( "GET", url + "table", false);
     xmlHttp.send( null );
 
-    hideLoading();
+    unblock();
     return JSON.parse(xmlHttp.response); 
 }
 
 function requestAMov(position){
-    showLoading();
+    block();
 
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open("POST", url + "make_mov", false);
@@ -35,18 +32,18 @@ function requestAMov(position){
     var data = JSON.stringify({"position": position});
     xmlHttp.send(data);
 
-    hideLoading();
+    unblock();
     return JSON.parse(xmlHttp.response);
 }
 
 function requestNewGame(){
-    showLoading();
+    block();
 
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open("POST", url + "new_game", false);
     xmlHttp.send();
 
-    hideLoading();
+    unblock();
     return JSON.parse(xmlHttp.response);
 }
 
@@ -72,13 +69,14 @@ function updateGame(gameInfo){
     updateGrid(gameInfo.representation);
     if(gameInfo.ended){
         document.getElementById("endGame").className = "subtitle";
+        block();
     } else {
         document.getElementById("endGame").className = "hide-element subtitle";
     }
 }
 
 function selectBox(value){
-    if(!boxStatus[value] || loading){
+    if(!boxStatus[value] || blocker){
         return;
     }
     
