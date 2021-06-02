@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="tictactoe.js"></script>
+</head>
+
+<body>
+    <h1 class="title">Tic Tac Toe</h1>
+    <table class="grid_play">
+      <tr>
+        <td><div id="box1" class="box" onclick="selectBox(0)"></div></td>
+        <td class="vertical_line"><div id="box2" class="box" onclick="selectBox(1)"></div></td>
+        <td><div id="box3" class="box" onclick="selectBox(2)"></div></td>
+      </tr>
+      <tr>
+        <td class="horizontal_line"><div id="box4" class="box" onclick="selectBox(3)"></div></td>
+        <td class="vertical_line horizontal_line"><div id="box5" class="box" onclick="selectBox(4)"></div></td>
+        <td class="horizontal_line"><div id="box6" class="box" onclick="selectBox(5)"></div></td>
+      </tr>
+      <tr>
+        <td><div id="box7" class="box" onclick="selectBox(6)"></div></td>
+        <td class="vertical_line"><div id="box8" class="box" onclick="selectBox(7)"></div></td>
+        <td><div id="box9" class="box" onclick="selectBox(8)"></div></td>
+      </tr>
+    </table>
+
+    <div id="loading" class="loading">
+        <div class="spinner"></div>
+    </div>
+</body>
+</html>
