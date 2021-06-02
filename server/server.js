@@ -1,18 +1,26 @@
 const express = require('express')
+const { Game } = require('./models')
+const Queue = require('./state')
+
+// API
 const app = express()
 const eventBus = require('js-event-bus')();
 const port = process.env.PORT || 8080;
 
 // https://hidden-spire-43960.herokuapp.com/
 
-const { Game } = require('./models')
-
-const Queue = require('./state')
-
 app.use((req, res, next) => {
   res.set('Cache-Control', 'no-store')
   next()
 })
+
+app.use(express.json())
+
+app.use(
+	express.urlencoded({
+	  extended: true
+	})
+)
 
 app.get('/pieces_news', (req, res) => {
  	res.send(queue.getFrontEncoded())
@@ -23,92 +31,32 @@ app.post('/piece_changed', (req, res) => {
   	res.sendStatus(200)
 })
 
-app.get('/teste_clear', (req, res) => {
-	queue.dequeue()
- 	res.send(queue.getFrontEncoded())
+app.get('/table', (req, res) => {
+	res.send(game.tableStatus())
 })
 
-app.get('/teste1', (req, res) => {
-	game.movePiece(true, 0, 0)
-	game.printTable()
+app.post('/make_mov', (req, res) => {
+	const postion = req.body.position - 1
+	x = Math.floor(postion/3)
+	y = postion%3
+
+	game.movePiece(true, x, y)
 	game.movePiece(false)
-	game.printTable()
- 	res.send(queue.getFrontEncoded())
+
+  	res.send(game.tableStatus())
 })
 
-app.get('/teste2', (req, res) => {
-	game.movePiece(true, 0, 1)
-	game.printTable()
-	game.movePiece(false)
-	game.printTable()
- 	res.send(queue.getFrontEncoded())
-})
-
-app.get('/teste3', (req, res) => {
-	game.movePiece(true, 0, 2)
-	game.printTable()
-	game.movePiece(false)
-	game.printTable()
- 	res.send(queue.getFrontEncoded())
-})
-
-app.get('/teste4', (req, res) => {
-	game.movePiece(true, 1, 0)
-	game.printTable()
-	game.movePiece(false)
-	game.printTable()
- 	res.send(queue.getFrontEncoded())
-})
-
-app.get('/teste5', (req, res) => {
-	game.movePiece(true, 1, 1)
-	game.printTable()
-	game.movePiece(false)
-	game.printTable()
- 	res.send(queue.getFrontEncoded())
-})
-
-app.get('/teste6', (req, res) => {
-	game.movePiece(true, 1, 2)
-	game.printTable()
-	game.movePiece(false)
-	game.printTable()
- 	res.send(queue.getFrontEncoded())
-})
-
-app.get('/teste7', (req, res) => {
-	game.movePiece(true, 2, 0)
-	game.printTable()
-	game.movePiece(false)
-	game.printTable()
- 	res.send(queue.getFrontEncoded())
-})
-
-app.get('/teste8', (req, res) => {
-	game.movePiece(true, 2, 1)
-	game.printTable()
-	game.movePiece(false)
-	game.printTable()
- 	res.send(queue.getFrontEncoded())
-})
-
-app.get('/teste9', (req, res) => {
-	game.movePiece(true, 2, 2)
-	game.printTable()
-	game.movePiece(false)
-	game.printTable()
- 	res.send(queue.getFrontEncoded())
-})
-
-app.get('/new_game', (req, res) => {
+app.post('/new_game', (req, res) => {
+	game.restore()
 	game = new Game(true)
-	game.printTable()
- 	res.send(queue.getFrontEncoded())
+ 	res.send(game.tableStatus())
 })
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
 })
+
+// QUEUE AND GAME
 
 queue = new Queue()
 
@@ -117,4 +65,3 @@ eventBus.on('new-move', function (source, target) {
 });
 
 game = new Game(true)
-game.printTable()

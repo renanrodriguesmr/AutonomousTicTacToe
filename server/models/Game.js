@@ -18,6 +18,7 @@ class Game {
 		this._turn = xStarting
 		this._ended = false
 		this.winner = null
+		this.movs = []
 
 		this._table = new Table()
 		this._bufferX = new Buffer(true)
@@ -72,7 +73,8 @@ class Game {
 			return false
 		}
 
-		eventBus.emit('new-move', null, bufferSpot.getName(), spot.getName());
+		eventBus.emit('new-move', null, bufferSpot.getName(), spot.getName())
+		this.movs.push([bufferSpot.getName(), spot.getName()])
 
 		spot.setPiece(isPlayerX)
 		bufferSpot.clearSpot()
@@ -87,6 +89,20 @@ class Game {
 
 	printTable(){
 		this._table.print()
+	}
+
+	tableStatus(){
+		const representation = this._table.getRepresentation()
+		const ended = this._ended
+		return {representation, ended}
+	}
+
+	restore(){
+		for(let i = 0; i < this.movs.length; i++){
+			const target = this.movs[i][0]
+			const source = this.movs[i][1]
+			eventBus.emit('new-move', null, source, target)
+		}
 	}
 }
 
