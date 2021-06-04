@@ -1,34 +1,33 @@
 Call Subroutine INITC
+
 MAIN_LOOP:
-Wait 20 (10ths of seconds)
-Call Subroutine SCRIPT.START
-Set Variable GO  = SCRIPT.GO
-If GO == 0 Jump to MAIN_LOOP
-Call Subroutine PICK_AND_PLACE
-Call Subroutine SCRIPT.FINISHMOV
-Jump to MAIN_LOOP
+    Wait 20 (10ths of seconds)
+    Call Subroutine SCRIPT.START
+    Set Variable GO  = SCRIPT.GO
+    If GO == 0 Jump to MAIN_LOOP
+    Call Subroutine PICK_AND_PLACE
+    Call Subroutine SCRIPT.FINISHMOV
+    Jump to MAIN_LOOP   
 End
-Remark: **********************************************************************************************
+
 Set Subroutine INITC
-Control On
-Set Variable FS100_DELAY_TIME  = 20
-Load script file: TICTACTOE.VBS
-Return from Subroutine
-Remark: **********************************************************************************************
+    Control On
+    Set Variable FS100_DELAY_TIME  = 20
+    Load script file: TICTACTOE.VBS
+    Return from Subroutine
+
 Set Subroutine PICK_AND_PLACE
-Copy FS100 Position SCRIPT.GETP3 to Position 1003
-Copy FS100 Position SCRIPT.GETP2 to Position 1002
-Copy FS100 Position SCRIPT.GETP1 to Position 1001
-FS100 Start Job GT001
-Wait FS100_DELAY_TIME (10ths of seconds)
-FS100 Job Wait 60 (seconds)
-Remark: *******************
-Copy FS100 Position SCRIPT.PUTP3 to Position 1003
-Copy FS100 Position SCRIPT.PUTP2 to Position 1002
-Copy FS100 Position SCRIPT.PUTP1 to Position 1001
-FS100 Start Job PT001
-Wait FS100_DELAY_TIME (10ths of seconds)
-FS100 Job Wait 60 (seconds)
-FINISH_ROUTINE:
-Return from Subroutine
-Remark: **********************************************************************************************
+    Copy FS100 Position SCRIPT.GETP3 to Position 1003
+    Copy FS100 Position SCRIPT.GETP2 to Position 1002
+    Copy FS100 Position SCRIPT.GETP1 to Position 1001
+    FS100 Start Job GT001
+    Wait FS100_DELAY_TIME (10ths of seconds)
+    FS100 Job Wait 60 (seconds)
+
+    Copy FS100 Position SCRIPT.PUTP3 to Position 1003
+    Copy FS100 Position SCRIPT.PUTP2 to Position 1002
+    Copy FS100 Position SCRIPT.PUTP1 to Position 1001
+    FS100 Start Job PT001
+    Wait FS100_DELAY_TIME (10ths of seconds)
+    FS100 Job Wait 60 (seconds)
+    Return from Subroutine

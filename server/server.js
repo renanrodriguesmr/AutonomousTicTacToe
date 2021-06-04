@@ -56,8 +56,10 @@ app.post('/make_mov', (req, res) => {
 	x = Math.floor(postion/3)
 	y = postion%3
 
-	game.movePiece(true, x, y)
-	game.movePiece(false)
+	const success = game.movePiece(true, x, y)
+	if(success){
+		game.movePiece(false)
+	}
 
   	res.send(game.tableStatus())
 })

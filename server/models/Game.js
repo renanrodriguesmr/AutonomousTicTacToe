@@ -58,8 +58,6 @@ class Game {
 			return false
 		}
 
-		this._turn = !this._turn
-
 		if(!isPlayerX){
 			const bestMove = tictactoe.bestMove(this._table.getRepresentation(), options)
 			x = Math.floor(bestMove/3)
@@ -72,6 +70,8 @@ class Game {
 		if(spot.isFilled()){
 			return false
 		}
+
+		this._turn = !this._turn
 
 		eventBus.emit('new-move', null, bufferSpot.getName(), spot.getName())
 		this.movs.push([bufferSpot.getName(), spot.getName()])
